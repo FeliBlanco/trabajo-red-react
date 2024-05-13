@@ -17,7 +17,6 @@ export default function Usuarios() {
             method:'GET'
         })
         .then(res => {
-            console.log(res.data)
             setUsers(res.data)
         })
         .catch(err => {

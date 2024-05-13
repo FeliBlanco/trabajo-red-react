@@ -65,7 +65,7 @@ const getPathDefault = () => {
 
             </div>
             <Typography.Title level={4} style={{color:'#fff', marginTop:'10px'}}>{getUserData?.nombre}</Typography.Title>
-            <Typography.Title level={5} keyboard theme='dark' style={{color:'#fff', marginTop:0}}>Administrador</Typography.Title>
+            <Typography.Title level={5} keyboard theme='dark' style={{color:'#fff', marginTop:0}}>{getUserData?.roles[0]?.nombre}</Typography.Title>
         </Flex>
         <div className="demo-logo-vertical" />
         <Menu onClick={({item, key}) => window.location.href = `/${items[key].ruta.replace('/', '')}`} theme="dark" mode="inline" defaultSelectedKeys={[getPathDefault()]} items={items.map((value, index) => ({...value, key: index, icon: createElement(value.icon)}))} />

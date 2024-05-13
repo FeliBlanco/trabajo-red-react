@@ -44,6 +44,9 @@ const RoutesComponent = () => {
 
         <OnlyUnlogged path="/login" Component={Login}/>
         <OnlyUnlogged path="/registro" Component={Registro}/>
+        <Routes>
+            <Route path="*" element={<div></div>}/>
+        </Routes>
     </BrowserRouter>
     )
 }
