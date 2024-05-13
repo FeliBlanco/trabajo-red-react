@@ -10,8 +10,6 @@ const { Header, Content, Sider } = Layout;
 export default function MenuComponent({children}) {
 
   const { tieneRol, getUserData, userPermisos } = useUser();
-  console.log(getUserData)
-  
   const items = [
     {
         icon: HomeOutlined,
@@ -39,8 +37,8 @@ export default function MenuComponent({children}) {
 
 const getPathDefault = () => {
     const path = window.location.pathname.split('/')[1];
-    console.log(path)
     const index = items.findIndex(i => i.ruta.replace('/', '') === path)
+    console.log(path)
     if(index !== -1) {
         return `${index}`;
     }
@@ -53,12 +51,6 @@ const getPathDefault = () => {
       width={250}
         breakpoint="lg"
         collapsedWidth="0"
-        onBreakpoint={(broken) => {
-          console.log(broken);
-        }}
-        onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
-        }}
       >
         <Flex vertical justify='center' align='center' style={{margin:'20px 0'}}>
             <div className="menu-user-icon">

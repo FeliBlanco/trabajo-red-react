@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, Switch, createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom'
 
 import Home from './routes/Home';
 import Login from './routes/Login';
@@ -11,43 +11,73 @@ import AgregarUsuario from './routes/AgregarUsuario';
 import useUser from './hooks/useUser';
 import Logout from './routes/Logout';
 import Usuario from './routes/Usuario';
+import AgregarRol from './routes/AgregarRol';
 
 
+
+const ProtectedRoutes = () => {
+    const { isLogged } = useUser();
+    return isLogged === false ? <Navigate to="/login" replace/> : <Outlet />
+}
+
+const ProtectedRoutesUnlogged = () => {
+    const { isLogged } = useUser();
+    return isLogged === true ? <Navigate to="/" replace/> : <Outlet />
+}
+
+const Router = createBrowserRouter([
+
+    {
+        element: <ProtectedRoutesUnlogged />,
+        children: [
+            {
+                path:'/login',
+                element: <Login />
+            },
+            {
+                path:'/registro',
+                element: <Registro />
+            }       
+        ]
+    },
+    {
+        element: <ProtectedRoutes />,
+        children: [
+            {
+                path:'/',
+                element: <Home />
+            },
+            {
+                path:'/roles',
+                element: <Roles />
+            },
+            {
+                path: '/roles/nuevo',
+                element: <AgregarRol />
+            },
+            {
+                path: '/usuarios/nuevo',
+                element: <AgregarUsuario />
+            },
+            {
+                path: '/usuarios',
+                element: <Usuarios />
+            },
+            {
+                path: '/usuarios/:id',
+                element: <Usuario />
+            },
+            {
+                path: '/logout',
+                element: <Logout />
+            }
+        ]
+    }
+])
 
 const RoutesComponent = () => {
-
-    const { isLogged, userPermisos } = useUser();
-
-    const OnlyLogged = ({path, Component, enabled}) => {
-        if(isLogged === false) return <Routes><Route path={path} element={<Navigate to="/login"/>}></Route></Routes>
-        if(enabled === true && isLogged === true) return <Routes><Route path={path} element={<Navigate to="/"/>}></Route></Routes>
-        return <Routes><Route path={path} Component={Component}/></Routes>
-    }
-
-    const OnlyUnlogged = ({path, Component}) => {
-        if(isLogged === true) return <Routes><Route path={path} element={<Navigate to="/"/>}></Route></Routes>
-        return <Routes><Route path={path} Component={Component}/></Routes>
-    }
-    
-
-    console.log("puede editar usuaris:",userPermisos.puedeEditarUsuarios())
     return (
-    <BrowserRouter>
-        <OnlyLogged path='/' Component={Home}/>
-        <OnlyLogged path="/login" Component={Login}/>
-        <OnlyLogged path="/roles" Component={Roles} enabled={!userPermisos.puedeEditarRoles()}/>
-
-        <OnlyLogged path="/usuarios/nuevo" Component={AgregarUsuario} enabled={!userPermisos.puedeEditarUsuarios()}/>
-        <OnlyLogged path="/usuarios/:id" Component={Usuario} enabled={!userPermisos.puedeEditarUsuarios()}/>
-        <OnlyLogged path="/usuarios" Component={Usuarios} enabled={!userPermisos.puedeEditarUsuarios()}/>
-        <OnlyLogged path="/logout" Component={Logout}/>
-
-        <OnlyUnlogged path="/login" Component={Login}/>
-        <OnlyUnlogged path="/registro" Component={Registro}/>
-        <Routes>
-            <Route path="*" element={<div></div>}/>
-        </Routes>
-    </BrowserRouter>
+        <RouterProvider router={Router}></RouterProvider>
     )
 }
 

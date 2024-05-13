@@ -19,12 +19,13 @@ function UserContextProvider({children}) {
                     try {
                         const user_data = JSON.parse(user_data_cache);
                         setUserData(user_data)
+                        setLogged(true);
                     }
                     catch(err){}
                 }
                 const token = await localStorage.getItem('token');
                 if(token) setToken(token)
-                    else setLogged(false)
+                else setLogged(false)
             }
             catch(err) {
                 setLogged(false)
@@ -36,14 +37,12 @@ function UserContextProvider({children}) {
     useEffect(() => {
         if(getToken) {
             setLogged(true)
-            console.log(getToken)
             localStorage.setItem('token', getToken);
             serviceUser
             .getData(getToken)
             .then(res => {
                 setUserData(res.data);
                 localStorage.setItem('userdata', JSON.stringify(res.data))
-                setLogged(true)
             })
             .catch(err => {
                 if(err.code === "401") {
