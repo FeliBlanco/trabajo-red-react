@@ -53,6 +53,13 @@ function UserContextProvider({children}) {
         }
     }, [getToken])
 
+    useEffect(() => {
+        if(getUserData?.deshabilitado === 1) {
+            alert("Se cerró tu sesión")
+            userLogout()
+        }
+    }, [getUserData])
+
     const tieneRol = (id) => {
         return getUserData?.roles?.filter(i => i.id === id).length > 0;
     }

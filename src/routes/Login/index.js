@@ -13,7 +13,9 @@ export default function Login() {
             const { code } = res.data;
             if(code === 1) {
                 setToken(res.data.token)
-            } else {
+            } if(code === 2) {
+                alert("No puedes ingresar en este momento")   
+            }else {
                 alert("No hay ninguna cuenta con esos datos!")
             }
         })
